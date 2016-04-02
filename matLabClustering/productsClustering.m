@@ -13,7 +13,7 @@ fclose(fl); %close file.
 D = zeros(numOfEl,numOfEl);
 newD = zeros(numOfEl,numOfEl);
 
-threadCount = int16(8); 
+threadCount = int16(2); 
 parpool(threadCount);
 parfor i = 1:threadCount
     D = D + distributeFullfilling(newD, i, threadCount, str);
@@ -37,12 +37,15 @@ D = squareform(D, 'tovector');
 
 % [deviation, indDev] = max(abs(D - oldD));
 
-Z = linkage(D, 'single');
+Z = linkage(D, 'ward');
 
 % here 0.5 is a threshold for the cutting clustered tree acoording to the
 % height
-clusteredTree = cluster(Z, 'Cutoff', 0.5);
-
+clusteredTree = cluster(Z, 'Cutoff', 0.3*max(Z(:,3)));
+% figure;
+% plot(Z(:,3));
+% figure;
+% plot(diff(Z(:,3)));
 %numOfClusters = max(clusteredTree); 
 %figure;
 %[H,T] = dendrogram(Z, 'colorthreshold', 'default') ;
