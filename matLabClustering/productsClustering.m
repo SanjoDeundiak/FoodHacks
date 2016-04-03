@@ -1,10 +1,16 @@
 % please change the name of the file
-fl = fopen('test.txt','r');
-
+fl = fopen('forGrisha.txt','r');
+%CONST_NUMBER_ELEM_EXTRACT = 8000;
 
 items = textscan(fl, '%s', 'Delimiter', '\n');
 str = unique(items{1,1});
+str = str(1:8000); % please change reductuion number
+oldStr = str;
 numOfEl = numel(str);
+for i = 1:numOfEl % s/[0-9]*//g
+    str{i} = regexprep(str{i},'[0-9]*','g');
+end
+    
 
 fclose(fl); %close file.
 
@@ -13,7 +19,7 @@ fclose(fl); %close file.
 D = zeros(numOfEl,numOfEl);
 newD = zeros(numOfEl,numOfEl);
 
-threadCount = int16(2); 
+threadCount = int16(4); 
 parpool(threadCount);
 parfor i = 1:threadCount
     D = D + distributeFullfilling(newD, i, threadCount, str);
@@ -39,25 +45,27 @@ D = squareform(D, 'tovector');
 
 Z = linkage(D, 'ward');
 
-% here 0.5 is a threshold for the cutting clustered tree acoording to the
+% here 0.5 is a threshold for the cuttin clustered tree acoording to the
 % height
-clusteredTree = cluster(Z, 'Cutoff', 0.3*max(Z(:,3)));
-% figure;
-% plot(Z(:,3));
-% figure;
-% plot(diff(Z(:,3)));
-%numOfClusters = max(clusteredTree); 
+clusteredTree = cluster(Z, 'maxclust', 350);
+%clusteredTree = cluster(Z, 'Cutoff', 0.3*max(Z(:,3)));
+%figure;
+%plot(Z(:,3));
+%figure;
+%plot(diff(Z(:,3)));
+numOfClusters = max(clusteredTree); 
 %figure;
 %[H,T] = dendrogram(Z, 'colorthreshold', 'default') ;
 stringAndCluster = cell(numOfEl, 2);
-stringAndCluster(:,1) =  str;
+stringAndCluster(:,1) =  oldStr;
 stringAndCluster(:, 2) = num2cell(clusteredTree);
+
 
 fid=fopen('productsClasters.csv','wt');
 [rows,cols]=size(stringAndCluster);
 
 for i=1:rows
-      fprintf(fid,'%s,',stringAndCluster{i,1:end-1});
+      fprintf(fid,'%s;',stringAndCluster{i,1:end-1});
       fprintf(fid,'%d\n',stringAndCluster{i,end});
 end
 
