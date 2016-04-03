@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "customer_id": "Client_0164",
+    "invoice_id": "Invoice_020076",
+    "home_store_id": 644,
+    "sales_channel_id": 1,
+    "sales_channel_description": "C&C",
+    "order_date": "2015-09-09",
+    "article_id": 423388,
+    "article_name": "10er Eier weiss/braun M Boden",
+    "amount": 18,
+    "turnover_inc_vat": 16.74
+  },
+  {
+    "id": 2,
+    "customer_id": "Client_0146",
+    "invoice_id": "Invoice_070787",
+    "home_store_id": 403,
+    "sales_channel_id": 1,
+    "sales_channel_description": "C&C",
+    "order_date": "2016-01-01",
+    "article_id": 155487,
+    "article_name": "1kg BIRNEN WILLIAMS",
+    "amount": 1,
+    "turnover_inc_vat": 1.85
+  },
+  {
+    "id": 3,
+    "customer_id": "Client_0146",
+    "invoice_id": "Invoice_070787",
+    "home_store_id": 403,
+    "sales_channel_id": 1,
+    "sales_channel_description": "C&C",
+    "order_date": "2016-01-01",
+    "article_id": 155487,
+    "article_name": "1kg BIRNEN WILLIAMS",
+    "amount": 8,
+    "turnover_inc_vat": 1.85
+  }
+]

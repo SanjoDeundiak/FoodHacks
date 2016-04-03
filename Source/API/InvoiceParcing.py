@@ -1,0 +1,59 @@
+from pandas import DataFrame
+from pandas import read_csv
+import json
+import datetime
+import pandas as pd
+InvoiceInput = 'Invoice_070787'
+checkdate = 0
+Grisha = read_csv('productsClasters.csv',sep = ',',names=['name','ClusterName'])
+
+with open('test.txt') as data_file:
+    data = json.load(data_file)
+    i=0
+    rows_list = []
+
+df2 = DataFrame(columns = ('name','price'))
+i = 0
+for InvoiceCount in data:
+    if (InvoiceInput == InvoiceCount['invoice_id']):
+        #df.iloc[i]=[InvoiceCount['article_name'],InvoiceCount['turnover_inc_vat']*InvoiceCount['amount']]
+        dict1 = {'num': i,'name' : InvoiceCount['article_name'], 'price' : InvoiceCount['turnover_inc_vat']*InvoiceCount['amount']}
+        rows_list.append(dict1)
+        checkdate = InvoiceCount['order_date']
+        i = i + 1
+df = pd.DataFrame(rows_list)
+
+"""for x in df:
+    for y in Grisha:
+        if (x['name'] == y['name']):
+            x['name']= y['Clustername']
+
+print df
+"""
+rows_list = []
+df.itertuples()
+while not df.empty:
+    obj = df.head(1)['name']
+    t = df.head(1)['name'].sum()
+    tmp = df[df['name'] == t].sum(axis=1).sum()
+    df = df[df['name'] != t]
+    dict1 = {'name' : obj.to_string(), 'price' : tmp}
+    rows_list.append(dict1)
+df2=pd.DataFrame(rows_list)
+
+#df2 = pd.concat([df['name'], Grisha['name']], axis=1, keys=['df', 'Grisha'])
+
+
+df1 = pd.merge(Grisha, df2, how='right', on='name')
+df1['ClusterName']=0
+print df1
+AmountClusters = len(df1.columns)
+df1 = df1.sort_values(by ='name')
+a = [0 for x in range(AmountClusters+2)]
+
+for index, row in df1.iterrows():
+    a[index] = row['price']/(df1['price'].sum())
+    # a[AmountClusters] = datetime.datetime.now().date() - checkdate
+    a[AmountClusters+1] = df1['price'].sum()
+
+print a
